@@ -19,16 +19,23 @@
 /* MACROS */
 #define TIME_STEP 64
 #define MAX_BITS 65535
-#define VELOCITY 1
+#define MAX_VELOCITY 30.3687
+#define RADIUS_WHEELS 0.04
+#define VELOCITY_MANUAL 7.5
+#define PI 3.141592
 
 /* PROTOFUNCTIONS */
 float bitsToCentimeters(float centimeters);
+
+float linearVelocity(float meters_per_second);
+
 void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
             WbDeviceTag motor_3);
 
 void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2,
                 WbDeviceTag motor_3, double distance_sensor_value1,
                 double distance_sensor_value2, float desired_centimeters);
+
 
 /* STATES */
 enum {
@@ -116,6 +123,7 @@ int main(int argc, char **argv)
                            break;
       }
 
+
       // distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
       // distance_sensor_value2 = wb_distance_sensor_get_value(distance_sensor2);
 
@@ -139,29 +147,48 @@ int main(int argc, char **argv)
 
 
 float bitsToCentimeters(float centimeters) {
-
     return (MAX_BITS*centimeters)/(20);
 
 }
 
+float linearVelocity(float meters_per_second) {
+    float RPM;
+    float linear_velocity;
+
+    meters_per_second = meters_per_second / RADIUS_WHEELS;
+    RPM = (meters_per_second * 290) / MAX_VELOCITY;
+    linear_velocity = ((2 * PI * RADIUS_WHEELS) / 60) * RPM;
+    return linear_velocity;
+}
+
+
 void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
             WbDeviceTag motor_3) {
     switch (key) {
-        case WB_KEYBOARD_UP:    wb_motor_set_velocity(motor_1,1);
-                                wb_motor_set_velocity(motor_2,1);
+        case WB_KEYBOARD_UP:    wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,0);
+                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
                                 break;
-        case WB_KEYBOARD_DOWN:  wb_motor_set_velocity(motor_1,-1);
-                                wb_motor_set_velocity(motor_2,-1);
+        case WB_KEYBOARD_DOWN:  wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,0);
+                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
                                 break;
-        case WB_KEYBOARD_LEFT:  wb_motor_set_velocity(motor_1,1);
-                                wb_motor_set_velocity(motor_2,1);
-                                wb_motor_set_velocity(motor_3,0);
+        case WB_KEYBOARD_LEFT:  wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
+                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
                                 break;
-        case WB_KEYBOARD_RIGHT: wb_motor_set_velocity(motor_1,1);
-                                wb_motor_set_velocity(motor_2,1);
+        case WB_KEYBOARD_RIGHT: wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
+                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
+                                break;
+        default:                wb_motor_set_velocity(motor_1,0);
+                                wb_motor_set_velocity(motor_2,0);
                                 wb_motor_set_velocity(motor_3,0);
+                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0));
                                 break;
     }
 }

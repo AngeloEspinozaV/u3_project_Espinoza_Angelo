@@ -100,7 +100,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                rotation 0 0 1 0
+                translation 6.404708664623414e-05 1.943880371794895e-05 -5.106607402494133e-07
+                rotation -6.678439807350237e-05 -0.000147424742232464 -0.9999999869028946 0.06715363179149257
                 children [
                   DEF WHEELS_TR1 Transform {
                     rotation 1 0 0 1.57
@@ -294,6 +295,7 @@ Robot {
                 name "solid(2)"
                 boundingObject USE WHEELS_TR1
                 physics Physics {
+                  density 2500
                 }
               }
             }
@@ -319,7 +321,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                rotation 0 0 1 0
+                translation 6.433526741000629e-05 1.9325569070850185e-05 3.3886234795943437e-07
+                rotation 0.00022977171657852732 -0.00015965390075994715 -0.9999999608577943 0.06721750582129835
                 children [
                   DEF WHEEL_TR2 Transform {
                     rotation 1 0 0 1.57
@@ -494,6 +497,7 @@ Robot {
                 ]
                 boundingObject USE WHEEL_TR2
                 physics Physics {
+                  density 2500
                 }
               }
             }
@@ -519,7 +523,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                rotation 0 0 1 0
+                translation 0.0001362332306898153 0.00011815907152129766 1.813689877860902e-05
+                rotation -1.245026663675892e-05 1.205200775376413e-06 -0.9999999999217692 0.0671604962800984
                 children [
                   DEF WHEEL_TR3 Transform {
                     rotation 1 0 0 1.57
@@ -695,6 +700,7 @@ Robot {
                 name "solid(1)"
                 boundingObject USE WHEEL_TR3
                 physics Physics {
+                  density 2500
                 }
               }
             }
@@ -749,7 +755,7 @@ Robot {
   ]
   boundingObject USE BODY_GR
   physics Physics {
-    density 2000
+    density 4000
     centerOfMass [
       0 0 0
     ]
