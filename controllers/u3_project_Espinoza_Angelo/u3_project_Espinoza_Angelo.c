@@ -19,9 +19,12 @@
 /* MACROS */
 #define TIME_STEP 64
 #define MAX_BITS 65535
-#define MAX_VELOCITY 30.3687
 #define RADIUS_WHEELS 0.04
+
+#define MAX_VELOCITY 30.3687
+#define VELOCITY_AUTONOMOUS 10
 #define VELOCITY_MANUAL 7.5
+
 #define PI 3.141592
 
 /* PROTOFUNCTIONS */
@@ -93,17 +96,17 @@ int main(int argc, char **argv)
     float desired_centimeters = bitsToCentimeters(17);
 
     int key;
-    int key_status;
+    int robot_status;
 
   while (wb_robot_step(TIME_STEP) != -1) {
 
       key = wb_keyboard_get_key();
 
       if (key == 'W') {
-          key_status = MANUAL;
+          robot_status = MANUAL;
       }
       else if (key == 'G') {
-          key_status = AUTONOMOUS;
+          robot_status = AUTONOMOUS;
       }
       else {
           wb_motor_set_velocity(motor_1, 0);
@@ -114,7 +117,7 @@ int main(int argc, char **argv)
       distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
       distance_sensor_value2 = wb_distance_sensor_get_value(distance_sensor2);
 
-      switch (key_status) {
+      switch (robot_status) {
           case MANUAL:     manual(key, motor_1, motor_2, motor_3);
                            break;
           case AUTONOMOUS: autonomous(motor_1, motor_2, motor_3,
@@ -158,6 +161,7 @@ float linearVelocity(float meters_per_second) {
     meters_per_second = meters_per_second / RADIUS_WHEELS;
     RPM = (meters_per_second * 290) / MAX_VELOCITY;
     linear_velocity = ((2 * PI * RADIUS_WHEELS) / 60) * RPM;
+
     return linear_velocity;
 }
 
@@ -168,27 +172,42 @@ void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
         case WB_KEYBOARD_UP:    wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,0);
-                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
+                                printf("Linear Velocity is: %.4lf\n",
+                                linearVelocity(0.3));
                                 break;
         case WB_KEYBOARD_DOWN:  wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,0);
-                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
+                                printf("Linear Velocity is: %.4lf\n",
+                                linearVelocity(0.3));
                                 break;
         case WB_KEYBOARD_LEFT:  wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
-                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
+                                printf("Linear Velocity is: %.4lf\n",
+                                linearVelocity(0.3));
                                 break;
         case WB_KEYBOARD_RIGHT: wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
-                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0.3));
+                                printf("Linear Velocity is: %.4lf\n",
+                                linearVelocity(0.3));
+                                break;
+        case 'A':               wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
+                                printf("Degrees/s are: %d\n", 45);
+                                break;
+        case 'S':               wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
+                                wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
+                                printf("Degrees/s are: %d\n", 45);
                                 break;
         default:                wb_motor_set_velocity(motor_1,0);
                                 wb_motor_set_velocity(motor_2,0);
                                 wb_motor_set_velocity(motor_3,0);
-                                printf("Linear Velocity is: %.4lf\n", linearVelocity(0));
+                                printf("Linear Velocity is: %.4lf\n",
+                                linearVelocity(0));
                                 break;
     }
 }
