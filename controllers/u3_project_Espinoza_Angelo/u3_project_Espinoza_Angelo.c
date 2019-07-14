@@ -25,10 +25,14 @@
 #define VELOCITY_AUTONOMOUS 10
 #define VELOCITY_MANUAL 7.5
 
+
 #define PI 3.141592
 
 /* PROTOFUNCTIONS */
 float bitsToCentimeters(float centimeters);
+
+void stopAllWheels(WbDeviceTag motor_1, WbDeviceTag motor_2,
+                   WbDeviceTag motor_3);
 
 float linearVelocity(float meters_per_second);
 
@@ -93,10 +97,11 @@ int main(int argc, char **argv)
     double position_sensor_value2;
     double position_sensor_value3;
 
-    float desired_centimeters = bitsToCentimeters(17);
+    float desired_centimeters = bitsToCentimeters(19.9);
 
     int key;
     int robot_status;
+    double current_time;
 
   while (wb_robot_step(TIME_STEP) != -1) {
 
@@ -109,9 +114,7 @@ int main(int argc, char **argv)
           robot_status = AUTONOMOUS;
       }
       else {
-          wb_motor_set_velocity(motor_1, 0);
-          wb_motor_set_velocity(motor_2, 0);
-          wb_motor_set_velocity(motor_3, 0);
+          stopAllWheels(motor_1, motor_2, motor_3);
       }
 
       distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
@@ -125,13 +128,15 @@ int main(int argc, char **argv)
                            desired_centimeters);
                            break;
       }
+      // current_time = wb_robot_get_time();
+      // printf("Current time: %.4f\n", current_time);
+      // printf("Desired centimeters %.4f\n", desired_centimeters);
 
+      distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
+      distance_sensor_value2 = wb_distance_sensor_get_value(distance_sensor2);
 
-      // distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
-      // distance_sensor_value2 = wb_distance_sensor_get_value(distance_sensor2);
-
-      // printf("Distance sensor right value is: %.4f\n", distance_sensor_value1);
-      // printf("Distance sensor left value is: %.4f\n", distance_sensor_value2);
+      printf("Distance sensor right value is: %.4f\n", distance_sensor_value1);
+      printf("Distance sensor left value is: %.4f\n", distance_sensor_value2);
 
       position_sensor_value1 = wb_position_sensor_get_value(position_sensor1);
       position_sensor_value2 = wb_position_sensor_get_value(position_sensor2);
@@ -151,8 +156,15 @@ int main(int argc, char **argv)
 
 float bitsToCentimeters(float centimeters) {
     return (MAX_BITS*centimeters)/(20);
-
 }
+
+void stopAllWheels(WbDeviceTag motor_1, WbDeviceTag motor_2,
+                   WbDeviceTag motor_3) {
+    wb_motor_set_velocity(motor_1, 0);
+    wb_motor_set_velocity(motor_2, 0);
+    wb_motor_set_velocity(motor_3, 0);
+}
+
 
 float linearVelocity(float meters_per_second) {
     float RPM;
@@ -169,35 +181,41 @@ float linearVelocity(float meters_per_second) {
 void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
             WbDeviceTag motor_3) {
     switch (key) {
+         /* MOVE FORWARD */
         case WB_KEYBOARD_UP:    wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,0);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
+        /* MOVE BACKWARD */
         case WB_KEYBOARD_DOWN:  wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,0);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
+        /* MOVE TO THE LEFT */
         case WB_KEYBOARD_LEFT:  wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
+        /* MOVE TO THE RIGHT */
         case WB_KEYBOARD_RIGHT: wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
+        /* TURN TO THE LEFT */
         case 'A':               wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
                                 printf("Degrees/s are: %d\n", 45);
                                 break;
+        /* TURN TO THE RIGHT */
         case 'S':               wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
                                 wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
@@ -215,42 +233,63 @@ void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
 void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
                 double distance_sensor_value1, double distance_sensor_value2,
                 float desired_centimeters) {
+    int flag_left = 0;
+    int flag_right = 0;
     /* MOVE FORWARD */
     if ((distance_sensor_value1 > desired_centimeters) && (distance_sensor_value2 > desired_centimeters)) {
 
-       wb_motor_set_velocity(motor_1, 1);
-       wb_motor_set_velocity(motor_2, 1);
+       wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
+       wb_motor_set_velocity(motor_2, VELOCITY_AUTONOMOUS);
        wb_motor_set_velocity(motor_3, 0);
     }
 
     /* STOP */
-    else if ((distance_sensor_value1 == desired_centimeters) && (distance_sensor_value2 == desired_centimeters)) {
+    else if ((distance_sensor_value1 <= desired_centimeters) && (flag_right == 0)) {
+        wb_motor_set_velocity(motor_1, 0);
+        wb_motor_set_velocity(motor_2, 0);
+        wb_motor_set_velocity(motor_3, 0);
 
+        flag_right = 1;
+    }
+
+    else if ((distance_sensor_value2 <= desired_centimeters) && (flag_left == 0)) {
        wb_motor_set_velocity(motor_1, 0);
        wb_motor_set_velocity(motor_2, 0);
        wb_motor_set_velocity(motor_3, 0);
+
+       flag_left = 1;
     }
 
     /* MOVE RIGHT AROUND A PIVOT */
-    else if((distance_sensor_value1 < desired_centimeters) && (distance_sensor_value2 < desired_centimeters)) {
-
-       wb_motor_set_velocity(motor_1, 0);
-       wb_motor_set_velocity(motor_2, -2);
-       wb_motor_set_velocity(motor_3, -2);
-    }
+    // else if((distance_sensor_value1 < desired_centimeters) && (distance_sensor_value2 < desired_centimeters)) {
+    //
+    //    wb_motor_set_velocity(motor_1, 0);
+    //    wb_motor_set_velocity(motor_2, -VELOCITY_AUTONOMOUS);
+    //    wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
+    // }
 
     /* AVOID OBSTACLES LEFT */
-    else if(distance_sensor_value2 <= desired_centimeters) {
+    if (distance_sensor_value2 <= desired_centimeters || flag_left == 1) {
+       wb_motor_set_velocity(motor_1, -VELOCITY_AUTONOMOUS);
+       wb_motor_set_velocity(motor_2, VELOCITY_AUTONOMOUS);
+       wb_motor_set_velocity(motor_3, VELOCITY_AUTONOMOUS);
 
-       wb_motor_set_velocity(motor_1, 0);
-       wb_motor_set_velocity(motor_2, 3);
-       wb_motor_set_velocity(motor_3, 3);
+       flag_left = 0;
     }
     /* AVOID OBSTACLES RIGHT */
-    else if(distance_sensor_value1 <= desired_centimeters) {
+    if (distance_sensor_value1 <= desired_centimeters || flag_right == 1) {
+        wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
+        wb_motor_set_velocity(motor_2, -VELOCITY_AUTONOMOUS);
+        wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
 
-       wb_motor_set_velocity(motor_1, 3);
-       wb_motor_set_velocity(motor_2, 0);
-       wb_motor_set_velocity(motor_3, -3);
+        flag_right   = 0;
     }
+
+    /* AVOID OBSTACLES RIGHT */
+    // else if(distance_sensor_value1 <= desired_centimeters) {
+    //
+    //    wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
+    //    wb_motor_set_velocity(motor_2, 0);
+    //    wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
+    // }
 }
