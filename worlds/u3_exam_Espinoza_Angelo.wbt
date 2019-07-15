@@ -2,8 +2,8 @@
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.2907054723834543 -0.8655154424591766 -0.40788889074233003 2.0361447836683655
-  position -4.092078001481153 4.699428369704343 -1.042188345489295
+  orientation -0.5310884977105842 -0.6311734272877467 -0.5653009041964768 2.0711174931674914
+  position -1.2208172661220493 9.18216432260087 0.43092002187702816
   follow "robot"
 }
 TexturedBackground {
@@ -755,7 +755,8 @@ Robot {
   ]
   boundingObject USE BODY_GR
   physics Physics {
-    density 4500
+    density -1
+    mass 10
     centerOfMass [
       0 0 0
     ]
@@ -823,24 +824,6 @@ Solid {
   boundingObject USE OBSTACLE1_SH
 }
 Solid {
-  translation -0.3728151191443926 0.1 0.7226715533280423
-  rotation 0 -1 0 0.0022128730000013194
-  children [
-    DEF OBSTACLE2_SH Shape {
-      appearance PBRAppearance {
-        baseColor 0.9882352941176471 0.9137254901960784 0.30980392156862746
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.2 0.2 0.2
-      }
-    }
-  ]
-  name "solid(5)"
-  boundingObject USE OBSTACLE2_SH
-}
-Solid {
   translation 1.2400000000000007 0.25 -0.12000000000000001
   children [
     DEF OBSTACLE3_SH Shape {
@@ -859,20 +842,182 @@ Solid {
   boundingObject USE OBSTACLE3_SH
 }
 Solid {
-  translation 1.670000000000001 0.35 0.5600000000000002
+  translation -1.6399999999999997 0.25 -1.3600000000000005
   children [
-    DEF OBSTACLE4_SH Shape {
+    DEF OBSTACLE3_SH Shape {
       appearance PBRAppearance {
-        baseColor 0.3058823529411765 0.6039215686274509 0.023529411764705882
+        baseColor 0.12549019607843137 0.2901960784313726 0.5294117647058824
         roughness 1
         metalness 0
       }
-      geometry Capsule {
+      geometry Cylinder {
         height 0.5
-        radius 0.09
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(9)"
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation 1.1200000000000003 0.25 -1.1600000000000001
+  children [
+    DEF OBSTACLE1_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0 0
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(11)"
+  boundingObject USE OBSTACLE1_SH
+}
+Solid {
+  translation -1.7700000000000002 0.25 1.4500000000000002
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.12549019607843137 0.2901960784313726 0.5294117647058824
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(12)"
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation -1.7200000000000006 0.25 0.41
+  children [
+    DEF OBSTACLE1_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0 0
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(15)"
+  boundingObject USE OBSTACLE1_SH
+}
+Solid {
+  translation 0.020000000000000615 0.25 -1.6599999999999997
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.3607843137254902 0.20784313725490197 0.4
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
       }
     }
   ]
   name "solid(7)"
-  boundingObject USE OBSTACLE4_SH
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation 0.020000000000000615 0.25 1.550000000000001
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.3607843137254902 0.20784313725490197 0.4
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(8)"
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation 1.140000000000001 0.25 1.3200000000000007
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.9882352941176471 0.9137254901960784 0.30980392156862746
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(5)"
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation -0.8199999999999995 0.25 1.7600000000000011
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.9882352941176471 0.9137254901960784 0.30980392156862746
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(10)"
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation -1.9799999999999998 0.25 -0.509999999999999
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.9882352941176471 0.9137254901960784 0.30980392156862746
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(13)"
+  boundingObject USE OBSTACLE3_SH
+}
+Solid {
+  translation 0.28000000000000075 0.25 0.7600000000000013
+  children [
+    DEF OBSTACLE3_SH Shape {
+      appearance PBRAppearance {
+        baseColor 0.9882352941176471 0.9137254901960784 0.30980392156862746
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.1
+      }
+    }
+  ]
+  name "solid(14)"
+  boundingObject USE OBSTACLE3_SH
 }

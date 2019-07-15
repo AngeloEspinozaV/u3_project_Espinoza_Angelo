@@ -53,8 +53,7 @@ enum {
 /* GLOBAL VARIABLES */
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
    wb_robot_init();
 
@@ -130,7 +129,7 @@ int main(int argc, char **argv)
       }
       // current_time = wb_robot_get_time();
       // printf("Current time: %.4f\n", current_time);
-      // printf("Desired centimeters %.4f\n", desired_centimeters);
+      printf("Desired centimeters %.4f\n", desired_centimeters);
 
       distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
       distance_sensor_value2 = wb_distance_sensor_get_value(distance_sensor2);
@@ -233,8 +232,10 @@ void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
 void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
                 double distance_sensor_value1, double distance_sensor_value2,
                 float desired_centimeters) {
+
     int flag_left = 0;
     int flag_right = 0;
+    
     /* MOVE FORWARD */
     if ((distance_sensor_value1 > desired_centimeters) && (distance_sensor_value2 > desired_centimeters)) {
 
@@ -260,16 +261,9 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
        flag_left = 1;
     }
 
-    /* MOVE RIGHT AROUND A PIVOT */
-    // else if((distance_sensor_value1 < desired_centimeters) && (distance_sensor_value2 < desired_centimeters)) {
-    //
-    //    wb_motor_set_velocity(motor_1, 0);
-    //    wb_motor_set_velocity(motor_2, -VELOCITY_AUTONOMOUS);
-    //    wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
-    // }
 
     /* AVOID OBSTACLES LEFT */
-    if (distance_sensor_value2 <= desired_centimeters || flag_left == 1) {
+    if (distance_sensor_value2 <= desired_centimeters && flag_left == 1) {
        wb_motor_set_velocity(motor_1, -VELOCITY_AUTONOMOUS);
        wb_motor_set_velocity(motor_2, VELOCITY_AUTONOMOUS);
        wb_motor_set_velocity(motor_3, VELOCITY_AUTONOMOUS);
@@ -277,19 +271,12 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
        flag_left = 0;
     }
     /* AVOID OBSTACLES RIGHT */
-    if (distance_sensor_value1 <= desired_centimeters || flag_right == 1) {
+    if (distance_sensor_value1 <= desired_centimeters && flag_right == 1) {
         wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
         wb_motor_set_velocity(motor_2, -VELOCITY_AUTONOMOUS);
         wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
 
-        flag_right   = 0;
+        flag_right = 0;
     }
 
-    /* AVOID OBSTACLES RIGHT */
-    // else if(distance_sensor_value1 <= desired_centimeters) {
-    //
-    //    wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
-    //    wb_motor_set_velocity(motor_2, 0);
-    //    wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
-    // }
 }
