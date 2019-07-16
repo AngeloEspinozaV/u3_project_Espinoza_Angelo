@@ -2,8 +2,8 @@
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5310884977105842 -0.6311734272877467 -0.5653009041964768 2.0711174931674914
-  position -1.2208172661220493 9.18216432260087 0.43092002187702816
+  orientation 0.5471286015703107 0.6290780926870547 0.5521875104028827 4.256365710480959
+  position -1.1068010513221447 1.69493939939264 -0.1350458198066355
   follow "robot"
 }
 TexturedBackground {
@@ -15,7 +15,7 @@ Floor {
 }
 Robot {
   translation -1 0.045 0
-  rotation 0 1 0 3.09
+  rotation 0 1 0 3.14
   children [
     DEF BODY_GR Group {
       children [
@@ -100,8 +100,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                translation 3.850324754901607e-05 -7.119440102921257e-05 -1.1014670775466584e-06
-                rotation -2.0303258352144598e-05 -3.4708346730909494e-05 -0.9999999991915542 0.2712929498997691
+                translation -1.0508754737592991e-05 -0.0001211130597082318 -4.665064456760293e-06
+                rotation -0.002528181026390362 -0.0008440054147865805 0.9999964479714705 5.963595066079329
                 children [
                   DEF WHEELS_TR1 Transform {
                     rotation 1 0 0 1.57
@@ -144,6 +144,7 @@ Robot {
                       ]
                       boundingObject USE SMALL_WHEEL__TR1
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -165,6 +166,7 @@ Robot {
                       name "solid(1)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -186,6 +188,7 @@ Robot {
                       name "solid(2)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -206,6 +209,7 @@ Robot {
                       name "solid(3)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -226,6 +230,7 @@ Robot {
                       name "solid(4)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -247,6 +252,7 @@ Robot {
                       name "solid(5)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -268,6 +274,7 @@ Robot {
                       name "solid(6)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -288,6 +295,7 @@ Robot {
                       name "solid(7)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -295,7 +303,7 @@ Robot {
                 name "solid(2)"
                 boundingObject USE WHEELS_TR1
                 physics Physics {
-                  density 2500
+                  mass 0.1
                 }
               }
             }
@@ -321,8 +329,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                translation 9.007236958713253e-05 7.199735075744964e-05 7.539973861936389e-07
-                rotation 0.00020818493322224466 -0.0001456954946994768 -0.9999999677159277 0.0739737941855639
+                translation 6.341071235344947e-05 1.8793881074876274e-05 8.456175520338286e-06
+                rotation 0.006616817102131858 -0.005834599766415047 0.9999610868313841 6.15944492963376
                 children [
                   DEF WHEEL_TR2 Transform {
                     rotation 1 0 0 1.57
@@ -346,6 +354,7 @@ Robot {
                       ]
                       boundingObject USE SMALL_WHEEL_TR2
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -388,6 +397,7 @@ Robot {
                       name "solid(2)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -408,6 +418,7 @@ Robot {
                       name "solid(3)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -429,6 +440,7 @@ Robot {
                       name "solid(4)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -450,6 +462,7 @@ Robot {
                       name "solid(5)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -471,6 +484,7 @@ Robot {
                       name "solid(6)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -491,13 +505,14 @@ Robot {
                       name "solid(7)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
                 ]
                 boundingObject USE WHEEL_TR2
                 physics Physics {
-                  density 2500
+                  mass 0.1
                 }
               }
             }
@@ -523,8 +538,8 @@ Robot {
                 }
               ]
               endPoint Solid {
-                translation -2.5891360131228366e-05 0.00017763253641808345 1.6115172847275258e-05
-                rotation 4.376412593902718e-06 -9.938050607107914e-07 0.9999999999899296 6.0969936636291875
+                translation -1.4923878725092403e-05 0.00041632149846914935 1.1951529339859766e-05
+                rotation -2.6556871867914315e-07 6.039288633135819e-06 -0.9999999999817283 0.18619503707159976
                 children [
                   DEF WHEEL_TR3 Transform {
                     rotation 1 0 0 1.57
@@ -548,6 +563,7 @@ Robot {
                       ]
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -569,6 +585,7 @@ Robot {
                       name "solid(1)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -590,6 +607,7 @@ Robot {
                       name "solid(2)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -610,6 +628,7 @@ Robot {
                       name "solid(3)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -631,6 +650,7 @@ Robot {
                       name "solid(4)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -652,6 +672,7 @@ Robot {
                       name "solid(5)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -673,6 +694,7 @@ Robot {
                       name "solid(6)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -693,6 +715,7 @@ Robot {
                       name "solid(7)"
                       boundingObject USE SMALL_WHEEL_SH
                       physics Physics {
+                        mass 0.1
                       }
                     }
                   }
@@ -700,7 +723,7 @@ Robot {
                 name "solid(1)"
                 boundingObject USE WHEEL_TR3
                 physics Physics {
-                  density 2500
+                  mass 0.1
                 }
               }
             }
@@ -710,7 +733,7 @@ Robot {
     }
     DEF DISTANCE_SENSOR_RIGHT DistanceSensor {
       translation -0.115 0 -0.05
-      rotation 0 1 0 3.14159
+      rotation 0 -1 0 3.2288
       children [
         Transform {
           rotation 0 1 0 -0.0872665
@@ -737,7 +760,7 @@ Robot {
     }
     DEF DISTANCE_SENSOR_RIGHT DistanceSensor {
       translation -0.115 0 0.05
-      rotation 0 1 0 3.14159
+      rotation 0 1 0 3.2288
       children [
         Transform {
           rotation 0 1 0 0.0872665
@@ -756,7 +779,7 @@ Robot {
   boundingObject USE BODY_GR
   physics Physics {
     density -1
-    mass 10
+    mass 3.5
     centerOfMass [
       0 0 0
     ]

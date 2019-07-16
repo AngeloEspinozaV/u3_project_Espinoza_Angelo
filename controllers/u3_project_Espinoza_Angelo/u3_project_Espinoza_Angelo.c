@@ -24,6 +24,8 @@
 #define MAX_VELOCITY 30.3687
 #define VELOCITY_AUTONOMOUS 10
 #define VELOCITY_MANUAL 7.5
+#define DISTANCE_OBSTACLE 17
+#define TURN_RATIO 0.7853
 
 
 #define PI 3.141592
@@ -43,6 +45,28 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2,
                 WbDeviceTag motor_3, double distance_sensor_value1,
                 double distance_sensor_value2, float desired_centimeters);
 
+void stopRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3);
+
+void moveForwardRobotManual(WbDeviceTag motor_1, WbDeviceTag motor_2,
+                            WbDeviceTag motor_3);
+
+void moveBackwardRobot(WbDeviceTag motor_1, WbDeviceTag motor_2,
+                             WbDeviceTag motor_3);
+void moveLeftRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                 motor_3);
+
+void moveRightRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                  motor_3);
+
+void turnLeftRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                   motor_3);
+
+void turnRightRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                    motor_3);
+
+void moveForwardRobotAutonomous(WbDeviceTag motor_1, WbDeviceTag motor_2,
+                                WbDeviceTag motor_3);
+
 
 /* STATES */
 enum {
@@ -51,7 +75,7 @@ enum {
 };
 
 /* GLOBAL VARIABLES */
-
+int counter_left, counter_right = 0;
 
 int main(int argc, char **argv) {
 
@@ -96,12 +120,11 @@ int main(int argc, char **argv) {
     double position_sensor_value2;
     double position_sensor_value3;
 
-    float desired_centimeters = bitsToCentimeters(19.9);
+    float desired_centimeters = bitsToCentimeters(DISTANCE_OBSTACLE);
 
     int key;
     int robot_status;
-    double current_time;
-
+    
   while (wb_robot_step(TIME_STEP) != -1) {
 
       key = wb_keyboard_get_key();
@@ -164,6 +187,61 @@ void stopAllWheels(WbDeviceTag motor_1, WbDeviceTag motor_2,
     wb_motor_set_velocity(motor_3, 0);
 }
 
+void stopRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3) {
+    wb_motor_set_velocity(motor_1, 0);
+    wb_motor_set_velocity(motor_2, 0);
+    wb_motor_set_velocity(motor_3, 0);
+}
+
+void moveForwardRobotManual(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                    motor_3) {
+    wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
+    wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
+    wb_motor_set_velocity(motor_3,0);
+}
+
+void moveBackwardRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                     motor_3) {
+     wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
+     wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
+     wb_motor_set_velocity(motor_3,0);
+}
+
+void moveLeftRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                 motor_3) {
+     wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
+     wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
+     wb_motor_set_velocity(motor_3,VELOCITY_MANUAL * 1.8);
+}
+void moveRightRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                  motor_3) {
+      wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
+      wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
+      wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL * 1.8);
+}
+void turnLeftRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                   motor_3) {
+       wb_motor_set_velocity(motor_1,TURN_RATIO);
+       wb_motor_set_velocity(motor_2,-TURN_RATIO);
+       wb_motor_set_velocity(motor_3,-TURN_RATIO);
+}
+void turnRightRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
+                    motor_3) {
+        wb_motor_set_velocity(motor_1,-TURN_RATIO);
+        wb_motor_set_velocity(motor_2,TURN_RATIO);
+        wb_motor_set_velocity(motor_3,TURN_RATIO);
+}
+
+void moveForwardRobotAutonomous(WbDeviceTag motor_1, WbDeviceTag motor_2,
+                                WbDeviceTag motor_3) {
+        wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
+        wb_motor_set_velocity(motor_2, VELOCITY_AUTONOMOUS);
+        wb_motor_set_velocity(motor_3, 0);
+}
+
+
+
+
 
 float linearVelocity(float meters_per_second) {
     float RPM;
@@ -181,48 +259,34 @@ void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
             WbDeviceTag motor_3) {
     switch (key) {
          /* MOVE FORWARD */
-        case WB_KEYBOARD_UP:    wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_3,0);
+        case WB_KEYBOARD_UP:    moveForwardRobotManual(motor_1, motor_2, motor_3);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
         /* MOVE BACKWARD */
-        case WB_KEYBOARD_DOWN:  wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_3,0);
+        case WB_KEYBOARD_DOWN:  moveBackwardRobot(motor_1, motor_2, motor_3);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
         /* MOVE TO THE LEFT */
-        case WB_KEYBOARD_LEFT:  wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
+        case WB_KEYBOARD_LEFT:  moveLeftRobot(motor_1, motor_2, motor_3);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
         /* MOVE TO THE RIGHT */
-        case WB_KEYBOARD_RIGHT: wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
+        case WB_KEYBOARD_RIGHT: moveRightRobot(motor_1, motor_2, motor_3);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0.3));
                                 break;
         /* TURN TO THE LEFT */
-        case 'A':               wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL);
+        case 'A':               turnLeftRobot(motor_1, motor_2, motor_3);
                                 printf("Degrees/s are: %d\n", 45);
                                 break;
         /* TURN TO THE RIGHT */
-        case 'S':               wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
-                                wb_motor_set_velocity(motor_3,VELOCITY_MANUAL);
+        case 'S':               turnRightRobot(motor_1, motor_2, motor_3);
                                 printf("Degrees/s are: %d\n", 45);
                                 break;
-        default:                wb_motor_set_velocity(motor_1,0);
-                                wb_motor_set_velocity(motor_2,0);
-                                wb_motor_set_velocity(motor_3,0);
+        default:                stopRobot(motor_1, motor_2, motor_3);
                                 printf("Linear Velocity is: %.4lf\n",
                                 linearVelocity(0));
                                 break;
@@ -233,50 +297,36 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
                 double distance_sensor_value1, double distance_sensor_value2,
                 float desired_centimeters) {
 
-    int flag_left = 0;
-    int flag_right = 0;
-    
+
     /* MOVE FORWARD */
-    if ((distance_sensor_value1 > desired_centimeters) && (distance_sensor_value2 > desired_centimeters)) {
-
-       wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
-       wb_motor_set_velocity(motor_2, VELOCITY_AUTONOMOUS);
-       wb_motor_set_velocity(motor_3, 0);
+    if (distance_sensor_value1 > desired_centimeters || distance_sensor_value2 > desired_centimeters) {
+        moveForwardRobotAutonomous(motor_1, motor_2, motor_3);
     }
 
-    /* STOP */
-    else if ((distance_sensor_value1 <= desired_centimeters) && (flag_right == 0)) {
-        wb_motor_set_velocity(motor_1, 0);
-        wb_motor_set_velocity(motor_2, 0);
-        wb_motor_set_velocity(motor_3, 0);
-
-        flag_right = 1;
+    if (distance_sensor_value2 <= desired_centimeters && distance_sensor_value2 < distance_sensor_value1) {
+        counter_left++;
     }
-
-    else if ((distance_sensor_value2 <= desired_centimeters) && (flag_left == 0)) {
-       wb_motor_set_velocity(motor_1, 0);
-       wb_motor_set_velocity(motor_2, 0);
-       wb_motor_set_velocity(motor_3, 0);
-
-       flag_left = 1;
-    }
-
 
     /* AVOID OBSTACLES LEFT */
-    if (distance_sensor_value2 <= desired_centimeters && flag_left == 1) {
-       wb_motor_set_velocity(motor_1, -VELOCITY_AUTONOMOUS);
-       wb_motor_set_velocity(motor_2, VELOCITY_AUTONOMOUS);
-       wb_motor_set_velocity(motor_3, VELOCITY_AUTONOMOUS);
+    if (counter_left >= 1 && counter_left <= 58) {
+        turnRightRobot(motor_1, motor_2, motor_3);
 
-       flag_left = 0;
+       counter_left++;
     }
-    /* AVOID OBSTACLES RIGHT */
-    if (distance_sensor_value1 <= desired_centimeters && flag_right == 1) {
-        wb_motor_set_velocity(motor_1, VELOCITY_AUTONOMOUS);
-        wb_motor_set_velocity(motor_2, -VELOCITY_AUTONOMOUS);
-        wb_motor_set_velocity(motor_3, -VELOCITY_AUTONOMOUS);
+    else {
+        counter_left = 0;
+    }
 
-        flag_right = 0;
+    /* AVOID OBSTACLES RIGHT */
+    if (distance_sensor_value1 < desired_centimeters && distance_sensor_value1 < distance_sensor_value2) {
+        counter_right++;
+    }
+    if (counter_right >= 1 && counter_right <= 58) {
+        turnLeftRobot(motor_1, motor_2, motor_3);
+        counter_right++;
+    }
+    else {
+        counter_right = 0;
     }
 
 }
