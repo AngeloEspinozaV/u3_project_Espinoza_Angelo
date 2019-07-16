@@ -1,8 +1,8 @@
 /*
  * File:          u3_project_Espinoza_Angelo.c
- * Date:
+ * Date:          July 16th, 2019
  * Description:
- * Author:
+ * Author:        Angelo D. Espinoza Valarezo
  * Modifications:
  */
 
@@ -15,6 +15,7 @@
 
 /* C LIBRARIES */
 #include <stdio.h>
+#include <stdlib.h>
 
 /* MACROS */
 #define TIME_STEP 64
@@ -124,7 +125,7 @@ int main(int argc, char **argv) {
 
     int key;
     int robot_status;
-    
+
   while (wb_robot_step(TIME_STEP) != -1) {
 
       key = wb_keyboard_get_key();
@@ -150,23 +151,16 @@ int main(int argc, char **argv) {
                            desired_centimeters);
                            break;
       }
-      // current_time = wb_robot_get_time();
-      // printf("Current time: %.4f\n", current_time);
-      printf("Desired centimeters %.4f\n", desired_centimeters);
 
       distance_sensor_value1 = wb_distance_sensor_get_value(distance_sensor1);
       distance_sensor_value2 = wb_distance_sensor_get_value(distance_sensor2);
-
-      printf("Distance sensor right value is: %.4f\n", distance_sensor_value1);
-      printf("Distance sensor left value is: %.4f\n", distance_sensor_value2);
 
       position_sensor_value1 = wb_position_sensor_get_value(position_sensor1);
       position_sensor_value2 = wb_position_sensor_get_value(position_sensor2);
       position_sensor_value3 = wb_position_sensor_get_value(position_sensor3);
 
-      printf("Position sensor wheel 1 is: %.4f\n", position_sensor_value1);
-      printf("Position sensor wheel 2 is: %.4f\n", position_sensor_value2);
-      printf("Position sensor wheel 3 is: %.4f\n", position_sensor_value3);
+      printf("Distance sensor right value is: %.4f||Position sensor wheel 1 is: %.4f||Distance sensor left value is: %.4f||Position sensor wheel 2 is: %.4f||Position sensor wheel 3 is: %.4f\n", distance_sensor_value1, position_sensor_value1, distance_sensor_value2, position_sensor_value2, position_sensor_value3);
+
 
   };
 
@@ -209,15 +203,15 @@ void moveBackwardRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
 
 void moveLeftRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
                  motor_3) {
-     wb_motor_set_velocity(motor_1,VELOCITY_MANUAL);
-     wb_motor_set_velocity(motor_2,-VELOCITY_MANUAL);
-     wb_motor_set_velocity(motor_3,VELOCITY_MANUAL * 1.8);
+     wb_motor_set_velocity(motor_1, 4);
+     wb_motor_set_velocity(motor_2,-4);
+     wb_motor_set_velocity(motor_3, 8);
 }
 void moveRightRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
                   motor_3) {
-      wb_motor_set_velocity(motor_1,-VELOCITY_MANUAL);
-      wb_motor_set_velocity(motor_2,VELOCITY_MANUAL);
-      wb_motor_set_velocity(motor_3,-VELOCITY_MANUAL * 1.8);
+      wb_motor_set_velocity(motor_1,-4);
+      wb_motor_set_velocity(motor_2, 4);
+      wb_motor_set_velocity(motor_3,-8);
 }
 void turnLeftRobot(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag
                    motor_3) {
@@ -299,30 +293,35 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
 
 
     /* MOVE FORWARD */
-    if (distance_sensor_value1 > desired_centimeters || distance_sensor_value2 > desired_centimeters) {
+    if (distance_sensor_value1 > desired_centimeters || distance_sensor_value2
+        > desired_centimeters) {
         moveForwardRobotAutonomous(motor_1, motor_2, motor_3);
+        printf("Linear Velocity is: %.4lf\n", linearVelocity(0.4));
     }
 
-    if (distance_sensor_value2 <= desired_centimeters && distance_sensor_value2 < distance_sensor_value1) {
+    if (distance_sensor_value2 <= desired_centimeters && distance_sensor_value2
+        < distance_sensor_value1) {
         counter_left++;
     }
 
     /* AVOID OBSTACLES LEFT */
-    if (counter_left >= 1 && counter_left <= 58) {
+    if (counter_left >= 1 && counter_left <= 60) {
         turnRightRobot(motor_1, motor_2, motor_3);
-
-       counter_left++;
+        printf("Degrees/s are: %d\n", 45);
+        counter_left++;
     }
     else {
         counter_left = 0;
     }
 
     /* AVOID OBSTACLES RIGHT */
-    if (distance_sensor_value1 < desired_centimeters && distance_sensor_value1 < distance_sensor_value2) {
+    if (distance_sensor_value1 < desired_centimeters && distance_sensor_value1
+        < distance_sensor_value2) {
         counter_right++;
     }
-    if (counter_right >= 1 && counter_right <= 58) {
+    if (counter_right >= 1 && counter_right <= 60) {
         turnLeftRobot(motor_1, motor_2, motor_3);
+        printf("Degrees/s are: %d\n", 45);
         counter_right++;
     }
     else {

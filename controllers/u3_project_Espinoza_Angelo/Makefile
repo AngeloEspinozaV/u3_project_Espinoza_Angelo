@@ -66,7 +66,7 @@
 ### VERBOSE = 1
 ###
 ###-----------------------------------------------------------------------------
-C_SOURCES = u3_project_Espinoza_Angelo.c autonomous.c
+C_SOURCES = u3_project_Espinoza_Angelo.c
 ### Do not modify: this includes Webots global Makefile.include
 space :=
 space +=
