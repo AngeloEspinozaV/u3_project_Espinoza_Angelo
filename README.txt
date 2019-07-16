@@ -41,10 +41,8 @@ In this case for 17cm the result was 55704.75 bits, however the functions thanks
 
 JUSTIFICATION: 
 
-The velocity chose variate from condition to condition since the sizes of the robot were not the best with the respect to the requested sensors, therefore I struggled a lot at the time of programming. A clear example appeared in a simple movement, when I did the test just trying to avoid the walls, apparently given that the distance sensor measures up to 0.2m and given that each side of the robot are 0.25m x 0.05m x 0.005m the robot struggle a lot when is turning around (either left or right).
-Nevertheless, I tried to program the best trajectory so that the motors work faster in some moments and slower in others, in this way having a balance. 
-At the moment the robot can dodge the four obstacles, however and given the last justification the wheels get stucked a little bit, the same at the time of reaching the walls, the robot struggles at the moment of turning around a corner.
-In order to solve these problems it is proposed to consider another distance sensor as the last worked (HC-SR04), however the solution can also be modifying the robot (its measures) in order to get a better proprotionated robot and for instance a better turn.
+The car now turns on in the same position, I've fixed the constant move with a counter for the left and right distance sensor, I was having troubles with the movement to the right and the left, however I've found the perfect combination so that it moves to the right and left correctly.
+Sometimes the robot crashes with some obstacles since the sensors are not able to detect them and the robot may get there just a moment and there it goes out there, maybe adjusting the DISTANCE_OBSTACLE Macros to a higher value would correct this and therefore the robot will be able to rotate even before the 17cm (19 was the best).  
 
 INSTRUCTIONS: 
 
@@ -53,5 +51,7 @@ The robot starts 1 meter apart from the 0,0,0 point respect to the floor, then d
 NOTE: 
 
 Might be the case that the at the beginning a WARNING appears, this is due to a triangle shape that I am using to cover the robot, however if this shape is quit the WARNING should disappear without affecting the mobility of the robot.
+
+I added some irrelevant mass (0.1) to each wheel and roller that is why at the beginning the bunch of WARNINGS, but it should work correctly.
  
 
