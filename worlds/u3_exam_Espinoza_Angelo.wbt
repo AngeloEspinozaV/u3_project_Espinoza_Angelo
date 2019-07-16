@@ -780,9 +780,6 @@ Robot {
   physics Physics {
     density -1
     mass 8
-    centerOfMass [
-      0 0 0
-    ]
   }
   controller "u3_project_Espinoza_Angelo"
 }

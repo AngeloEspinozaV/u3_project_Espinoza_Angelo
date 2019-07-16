@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
     float desired_centimeters = bitsToCentimeters(DISTANCE_OBSTACLE);
 
     int key;
-    int robot_status;
+    int robot_status = 0;
 
   while (wb_robot_step(TIME_STEP) != -1) {
 
@@ -132,9 +132,12 @@ int main(int argc, char **argv) {
 
       if (key == 'W') {
           robot_status = MANUAL;
+          printf("MANUAL MODE ACTIVATED\n");
+
       }
       else if (key == 'G') {
           robot_status = AUTONOMOUS;
+          printf("AUTONOMOUS MODE ACTIVATED\n");
       }
       else {
           stopAllWheels(motor_1, motor_2, motor_3);
@@ -159,8 +162,8 @@ int main(int argc, char **argv) {
       position_sensor_value2 = wb_position_sensor_get_value(position_sensor2);
       position_sensor_value3 = wb_position_sensor_get_value(position_sensor3);
 
-      printf("Distance sensor right value is: %.4f||Position sensor wheel 1 is: %.4f||Distance sensor left value is: %.4f||Position sensor wheel 2 is: %.4f||Position sensor wheel 3 is: %.4f\n", distance_sensor_value1, position_sensor_value1, distance_sensor_value2, position_sensor_value2, position_sensor_value3);
-
+      printf("Distance sensor right value:%.4f || Position sensor wheel 1: %.4f || Distance sensor left value: %.4f || Position sensor wheel 2: %.4f || Position sensor wheel 3: %.4f\n", distance_sensor_value1, position_sensor_value1, distance_sensor_value2, position_sensor_value2, position_sensor_value3);
+      printf("\t\t\t\t     Distance sensor right value: %.2fm || Distance sensor left values: %.2fm\n", distance_sensor_value1 * 0.2/MAX_BITS,distance_sensor_value2 * 0.2/MAX_BITS);
 
   };
 
@@ -254,34 +257,34 @@ void manual(int key, WbDeviceTag motor_1, WbDeviceTag motor_2,
     switch (key) {
          /* MOVE FORWARD */
         case WB_KEYBOARD_UP:    moveForwardRobotManual(motor_1, motor_2, motor_3);
-                                printf("Linear Velocity is: %.4lf\n",
+                                printf("Linear Velocity is: %.2lfm\n",
                                 linearVelocity(0.3));
                                 break;
         /* MOVE BACKWARD */
         case WB_KEYBOARD_DOWN:  moveBackwardRobot(motor_1, motor_2, motor_3);
-                                printf("Linear Velocity is: %.4lf\n",
+                                printf("Linear Velocity is: %.2lfm\n",
                                 linearVelocity(0.3));
                                 break;
         /* MOVE TO THE LEFT */
         case WB_KEYBOARD_LEFT:  moveLeftRobot(motor_1, motor_2, motor_3);
-                                printf("Linear Velocity is: %.4lf\n",
+                                printf("Linear Velocity is: %.2lfm\n",
                                 linearVelocity(0.3));
                                 break;
         /* MOVE TO THE RIGHT */
         case WB_KEYBOARD_RIGHT: moveRightRobot(motor_1, motor_2, motor_3);
-                                printf("Linear Velocity is: %.4lf\n",
+                                printf("Linear Velocity is: %.2lfm\n",
                                 linearVelocity(0.3));
                                 break;
         /* TURN TO THE LEFT */
         case 'A':               turnLeftRobot(motor_1, motor_2, motor_3);
-                                printf("Degrees/s are: %d\n", 45);
+                                printf("Degrees/s are: %ddeg/s\n", 45);
                                 break;
         /* TURN TO THE RIGHT */
         case 'S':               turnRightRobot(motor_1, motor_2, motor_3);
-                                printf("Degrees/s are: %d\n", 45);
+                                printf("Degrees/s are: %ddeg/s\n", 45);
                                 break;
         default:                stopRobot(motor_1, motor_2, motor_3);
-                                printf("Linear Velocity is: %.4lf\n",
+                                printf("Linear Velocity is: %.2lfm\n",
                                 linearVelocity(0));
                                 break;
     }
@@ -296,7 +299,7 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
     if (distance_sensor_value1 > desired_centimeters || distance_sensor_value2
         > desired_centimeters) {
         moveForwardRobotAutonomous(motor_1, motor_2, motor_3);
-        printf("Linear Velocity is: %.4lf\n", linearVelocity(0.4));
+        printf("Linear Velocity is: %.2lfm\n", linearVelocity(0.4));
     }
 
     if (distance_sensor_value2 <= desired_centimeters && distance_sensor_value2
@@ -307,7 +310,7 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
     /* AVOID OBSTACLES LEFT */
     if (counter_left >= 1 && counter_left <= 60) {
         turnRightRobot(motor_1, motor_2, motor_3);
-        printf("Degrees/s are: %d\n", 45);
+        printf("Degrees/s are: %ddeg/s\n", 45);
         counter_left++;
     }
     else {
@@ -321,7 +324,7 @@ void autonomous(WbDeviceTag motor_1, WbDeviceTag motor_2, WbDeviceTag motor_3,
     }
     if (counter_right >= 1 && counter_right <= 60) {
         turnLeftRobot(motor_1, motor_2, motor_3);
-        printf("Degrees/s are: %d\n", 45);
+        printf("Degrees/s are: %ddeg/s\n", 45);
         counter_right++;
     }
     else {
